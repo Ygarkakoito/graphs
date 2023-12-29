@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Объяснение для даши кто где соснул </title>
+  <!-- Подключение Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Дополнительные стили могут быть добавлены здесь */
+    #graph-container {
+      height: 500px;
+      border: 1px solid #ddd;
+    }
+
+    #relations-table {
+      margin-top: 20px;
+    }
+
+    #relations-table th, #relations-table td {
+      padding: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Объяснение для даши кто где соснул </h1>
+  <div id="graph-container"></div>
+  <table class="table table-bordered" id="relations-table">
+    <thead>
+      <tr>
+        <th>От кого</th>
+        <th>Кому</th>
+        <th>Тип связи</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Здесь будут добавлены строки таблицы динамически -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Подключение Bootstrap JS и Popper.js -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!-- Подключение библиотеки для отрисовки графа -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Данные о друзьях и связях (пример)
+    var nodes = new vis.DataSet([
+      { id: 0, label: 'Я - Ева', group: 'me', description: 'ну это я че еще говорить', history: 'лол' },
+      { id: 1, label: 'Аня Мезенцева', group: 'friends', description: 'мы учимся вместе в одной группе', history: 'встречались год с чем-то, она из орска, сейчас дружим' },
+      { id: 2, label: 'яна куприянова', group: 'friends', description: 'на первом курсе мы встречались 2 месяца( февраль), она работает в стрипухе, тоже из орска, лучшая подруга ани ', history: 'сейчас оч редко видимся' },
+      { id: 3, label: 'Даша Исупова', group: 'friends', description: 'учимся в одной группе', history: 'она встречалась с женатиком' },
+      { id: 4, label: 'Настя мерзлова', group: 'friends', description: 'учимся в одной группе', history: 'встречается с 33 летним чуваком из сбера' },
+      { id: 5, label: 'коля', group: 'friends', description: 'встречались 3 раза в период после егэ и до второго семестра(февраль), я уходила от него к женщинам, а потом снова возвращалась. мы учились в одной школе в 10 классе', history: 'бедный коля... жили с ним полтора месяца у него в доме' },
+      { id: 6, label: 'Влад марков', group: 'relatives', description: 'мы в одной группе', history: 'он подкатывал постоянно даже во время наших отношений с аней, пытался поцеловать меня. на первом курсе переспали два раза, у него биг дик' },
+      { id: 7, label: 'настя савчук', group: 'relatives', description: 'познакомились в zoe на первом курсе в октябре, моя лучшая подружка', history: 'она живет в бутово, учится на журфаке, встречалась с телей и ариной, я недавно узнала, что мы целовались на первой встрече, я была пьяной...' },
+      { id: 8, label: 'арина', group: 'relatives', description: 'познакомились в zoe на первом курсе в декабре', history: 'она из воронежа, встречалась с 72 летним преподом и настей. ' },
+    { id: 9, label: 'теля', group: 'relatives', description: 'познакомились в zoe на первом курсе в феврале', history: 'она из финашки, встречалась с настей, не любит аню мезенцеву, поёт оч красиво' },
+      { id: 10, label: 'Крис', group: 'relatives', description: 'познакомились в питере перед первым курсом в июле, моя лучшая подружка', history: 'учится в мчс, мы вместе отмечали прошлый нг, сейчас встречается с дианой, они живут вместе' },
+      { id: 11, label: 'диана', group: 'relatives', description: 'девушка крис, мой брат , потому что мы оч похожи(одинаковое отчество ахахаха)', history: 'живет с крис' },
+      { id: 12, label: 'Андрей сунцов', group: 'friends', description: 'учимся в одной группе', history: 'комфортный чел' },
+      { id: 13, label: 'димочка преснухин', group: 'friends', description: 'учимся в одной группе', history: 'мой краш, оч умный чел' },
+      { id:14, label: 'паша павлов', group: 'friends', description: 'учимся в одной группе', history: 'встречается с полиной 6 лет уже, моя любимая пара, работает в сбере' },
+      { id: 15, label: 'Полина', group: 'friends', description: 'девушка паши', history: 'оч камфи' },
+      { id: 16, label: 'Лиза', group: 'friends', description: 'встречались два месяца на первом курсе с сентября', history: 'познакомились в zoe' },
+    ]);
+
+    var edges = new vis.DataSet([
+      { from: 0, to: 1, label: 'бывшие', color: { color: 'red' } },
+      { from: 0, to: 2, label: 'бывшие', color: { color: 'red' } },
+      { from: 1, to: 2, label: 'лучшие подруги', color: { color: 'blue' } },
+      { from: 1, to: 3, label: 'лучшие подруги', color: { color: 'blue' } },
+      { from: 4, to: 3, label: 'лучшие подруги', color: { color: 'blue' } },
+      { from: 0, to: 3, label: 'в одной группе', color: { color: 'purple' } },
+      { from: 0, to: 4, label: 'в одной группе', color: { color: 'purple' } },
+      { from: 0, to: 5, label: 'бывшие', color: { color: 'orange' } },
+      { from: 0, to: 16, label: 'бывшие', color: { color: 'orange' } },
+      { from: 0, to: 6, label: 'в одной группе', color: { color: 'brown' } },
+      { from: 0, to: 7, label: 'лучшие подруги', color: { color: 'pink' } },
+      { from: 8, to: 7, label: 'лучшие подруги', color: { color: 'pink' } },
+      { from: 9, to: 7, label: 'бывшие', color: { color: 'pink' } },
+      { from: 9, to: 0, label: 'подруги', color: { color: 'pink' } },
+      { from: 10, to: 0, label: 'лучшие подруги', color: { color: 'pink' } },
+      { from: 11, to: 10, label: 'встречаются', color: { color: 'pink' } },
+      { from: 0, to: 12, label: 'в одной группе', color: { color: 'purple' } },
+      { from: 0, to: 13, label: 'в одной группе', color: { color: 'purple' } },
+      { from: 0, to: 14, label: 'в одной группе', color: { color: 'purple' } },
+      { from: 14, to: 15, label: 'встречаются', color: { color: 'purple' } },
+      // Добавьте связи между друзьями и другими группами здесь
+    ]);
+
+    // Создание объекта с данными для графа
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+
+    // Опции отображения графа
+    var options = {
+      groups: {
+        me: {
+          shape: 'circle',
+          color: '#FF5722' // Цвет узла 'me'
+        },
+        friends: {
+          shape: 'circle',
+          color: '#4CAF50' // Цвет узлов в группе 'friends'
+        },
+        colleagues: {
+          shape: 'circle',
+          color: '#FF5722' // Цвет узлов в группе 'colleagues'
+        },
+        relatives: {
+          shape: 'circle',
+          color: '#2196F3' // Цвет узлов в группе 'relatives'
+        }
+        // Добавьте другие группы и цвета по необходимости
+      },
+      interaction: {
+        hover: true
+      },
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -1000,
+          centralGravity: 0.3,
+          springLength: 200
+        },
+        maxVelocity: 50,
+        minVelocity: 0.1,
+        solver: 'barnesHut',
+        stabilization: {
+          iterations: 1000
+        }
+      }
+    };
+
+    // Создание экземпляра графа
+    var container = document.getElementById('graph-container');
+    var network = new vis.Network(container, data, options);
+
+    // Обработка события клика на узел
+    network.on('click', function (event) {
+      var nodeId = event.nodes[0];
+      var nodeDetails = nodes.get(nodeId);
+      showNodeDetails(nodeDetails);
+    });
+    var relationsTable = document.getElementById('relations-table').getElementsByTagName('tbody')[0];
+
+    edges.forEach(function (edge) {
+      var fromNode = nodes.get(edge.from).label;
+      var toNode = nodes.get(edge.to).label;
+      var relationType = edge.label;
+
+      var newRow = relationsTable.insertRow(relationsTable.rows.length);
+      var cellFrom = newRow.insertCell(0);
+      var cellTo = newRow.insertCell(1);
+      var cellType = newRow.insertCell(2);
+
+      cellFrom.innerHTML = fromNode;
+      cellTo.innerHTML = toNode;
+      cellType.innerHTML = relationType;
+    });
+
+    // Функция для отображения подробной информации в модальном окне
+    function showNodeDetails(details) {
+      var modalContent = '<h5>' + details.label + '</h5>' +
+                         '<p><strong>Описание:</strong> ' + details.description + '</p>' +
+                         '<p><strong>История отношений:</strong> ' + details.history + '</p>';
+      $('#nodeDetailsModal .modal-body').html(modalContent);
+      $('#nodeDetailsModal').modal('show');
+    }
+  });
+  
+</script>
+
+<!-- Модальное окно для отображения подробной информации -->
+<div class="modal fade" id="nodeDetailsModal" tabindex="-1" role="dialog" aria-labelledby="nodeDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="nodeDetailsModalLabel">Подробная информация</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Содержимое модального окна будет добавлено динамически -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

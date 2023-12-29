@@ -71,6 +71,8 @@
       { id:14, label: 'паша павлов', group: 'friends', description: 'учимся в одной группе', history: 'встречается с полиной 6 лет уже, моя любимая пара, работает в сбере' },
       { id: 15, label: 'Полина', group: 'friends', description: 'девушка паши', history: 'оч камфи' },
       { id: 16, label: 'Лиза', group: 'friends', description: 'встречались два месяца на первом курсе с сентября', history: 'познакомились в zoe' },
+      { id: 17, label: 'артем', group: 'friends', description: 'встречались 11 классе', history: 'ничего интересного не было' },
+      { id: 18, label: 'артем', group: 'friends', description: 'встречались с 9 по 10 класс', history: 'самые долгие отношения' },
     ]);
 
     var edges = new vis.DataSet([
@@ -82,6 +84,7 @@
       { from: 0, to: 3, label: 'в одной группе', color: { color: 'purple' } },
       { from: 0, to: 4, label: 'в одной группе', color: { color: 'purple' } },
       { from: 0, to: 5, label: 'бывшие', color: { color: 'orange' } },
+      { from: 2, to: 6, label: 'переспали', color: { color: 'orange' } },
       { from: 0, to: 16, label: 'бывшие', color: { color: 'orange' } },
       { from: 0, to: 6, label: 'в одной группе', color: { color: 'brown' } },
       { from: 0, to: 7, label: 'лучшие подруги', color: { color: 'pink' } },
@@ -94,6 +97,9 @@
       { from: 0, to: 13, label: 'в одной группе', color: { color: 'purple' } },
       { from: 0, to: 14, label: 'в одной группе', color: { color: 'purple' } },
       { from: 14, to: 15, label: 'встречаются', color: { color: 'purple' } },
+      { from: 0, to: 17, label: 'бывшие', color: { color: 'orange' } },
+      { from: 0, to: 18, label: 'бывшие', color: { color: 'orange' } },
+      
       // Добавьте связи между друзьями и другими группами здесь
     ]);
 

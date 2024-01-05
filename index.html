@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Объяснение для даши кто где соснул </title>
+  <title>Объяснение для даши </title>
   <!-- Подключение Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -26,21 +26,18 @@
 <body>
 
 <div class="container mt-4">
-  <h1 class="mb-4">Объяснение для даши кто где соснул </h1>
+  <h1 class="mb-4">Объяснение для даши  
+      <img src="https://i.gifer.com/PO8q.gif" alt="GIF" style="width: 50px; height: 50px;">
+  </h1>
+
+  <!-- Add margin-bottom to create space below the h1 -->
+  <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#randomPhraseModal">
+    Нажми сюда кот!!!!
+  </button>
+
   <div id="graph-container"></div>
-  <table class="table table-bordered" id="relations-table">
-    <thead>
-      <tr>
-        <th>От кого</th>
-        <th>Кому</th>
-        <th>Тип связи</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Здесь будут добавлены строки таблицы динамически -->
-    </tbody>
-  </table>
 </div>
+
 
 <!-- Подключение Bootstrap JS и Popper.js -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -52,6 +49,35 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+      // Function to display a random cute phrase in the modal
+    var cutePhrases = [
+      "ты самый милый котик!!!!",
+      "кошка ты лучше всех, даже не смей сомневаться!!!!",
+      "жоско обняла и приподняла!!!",
+      "а ну быстро улыбнулась!!!",
+      "ну ты котик!!!!",
+    ];
+
+    var cuteGIFs = [
+      "https://i.gifer.com/VgK.gif",
+      "https://i.gifer.com/3ENu.gif",
+      "https://i.gifer.com/19wL.gif",
+      "https://i.gifer.com/nS2.gif",
+      "https://i.gifer.com/av.gif",
+    ];
+
+    function showRandomPhrase() {
+      var randomPhrase = cutePhrases[Math.floor(Math.random() * cutePhrases.length)];
+      var randomGIF = cuteGIFs[Math.floor(Math.random() * cuteGIFs.length)];
+
+      var modalContent = '<p>' + randomPhrase + '</p>' +
+                         '<img src="' + randomGIF + '" alt="подожди тут будет гифка" style="width: 100px; height: 100px;">';
+      $('#randomPhraseModal .modal-body').html(modalContent);
+    }
+
+    $(document).ready(function () {
+      $('#randomPhraseModal').on('show.bs.modal', showRandomPhrase);
+    });
     // Данные о друзьях и связях (пример)
     var nodes = new vis.DataSet([
       { id: 0, label: 'Я - Ева', group: 'me', description: 'ну это я че еще говорить', history: 'лол' },
@@ -158,23 +184,6 @@
       var nodeDetails = nodes.get(nodeId);
       showNodeDetails(nodeDetails);
     });
-    var relationsTable = document.getElementById('relations-table').getElementsByTagName('tbody')[0];
-
-    edges.forEach(function (edge) {
-      var fromNode = nodes.get(edge.from).label;
-      var toNode = nodes.get(edge.to).label;
-      var relationType = edge.label;
-
-      var newRow = relationsTable.insertRow(relationsTable.rows.length);
-      var cellFrom = newRow.insertCell(0);
-      var cellTo = newRow.insertCell(1);
-      var cellType = newRow.insertCell(2);
-
-      cellFrom.innerHTML = fromNode;
-      cellTo.innerHTML = toNode;
-      cellType.innerHTML = relationType;
-    });
-
     // Функция для отображения подробной информации в модальном окне
     function showNodeDetails(details) {
       var modalContent = '<h5>' + details.label + '</h5>' +
@@ -186,7 +195,6 @@
   });
   
 </script>
-
 <!-- Модальное окно для отображения подробной информации -->
 <div class="modal fade" id="nodeDetailsModal" tabindex="-1" role="dialog" aria-labelledby="nodeDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -206,6 +214,23 @@
     </div>
   </div>
 </div>
-
+<div class="modal fade" id="randomPhraseModal" tabindex="-1" role="dialog" aria-labelledby="randomPhraseModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="randomPhraseModalLabel">Милая фраза</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Content for displaying random cute phrases will be added dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
